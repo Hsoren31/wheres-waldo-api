@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Stage {
+  title       String      @id @unique
+  characters  Character[]
+  image       Image?
+  leaderBoard Score[]
+}
+
+model Image {
+  title      String @id @unique
+  url        String
+  height     Int
+  width      Int
+  stageTitle String @unique
+  stage      Stage  @relation(fields: [stageTitle], references: [title])
+}
+
+model Character {
+  id         String  @id @default(uuid())
+  name       String
+  location   Json
+  stageTitle String?
+  stage      Stage?  @relation(fields: [stageTitle], references: [title])
+}
+
+model Score {
+  id         String   @id @default(uuid())
+  name       String
+  time       DateTime
+  createdAt  DateTime @default(now())
+  stageTitle String?
+  stage      Stage?   @relation(fields: [stageTitle], references: [title])
+}

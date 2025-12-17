@@ -1,0 +1,30 @@
+{
+  "name": "wheres-waldo-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hsoren31/wheres-waldo-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Hsoren31/wheres-waldo-api/issues"
+  },
+  "homepage": "https://github.com/Hsoren31/wheres-waldo-api#readme",
+  "devDependencies": {
+    "prisma": "^7.1.0"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.1.0",
+    "@prisma/client": "^7.1.0",
+    "dotenv": "^17.2.3",
+    "pg": "^8.16.3"
+  }
+}
