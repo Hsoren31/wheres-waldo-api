@@ -1,7 +1,7 @@
 import { prisma } from "./lib/prisma.js";
 
 async function main() {
-  const stage1 = await prisma.stage.create({
+  await prisma.stage.create({
     data: {
       title: "Space Station",
       image: {
@@ -38,7 +38,6 @@ async function main() {
       },
     },
   });
-  console.log(stage1);
 }
 
 main()
