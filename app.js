@@ -1,4 +1,5 @@
 import _ from "lodash";
+import "dotenv/config.js";
 import { prisma } from "./lib/prisma.js";
 import express from "express";
 import { body, check, validationResult, matchedData } from "express-validator";
@@ -60,7 +61,7 @@ app.get("/{*splat}", (req, res) => {
   res.status(404);
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, (error) => {
   if (error) {
     throw error;
