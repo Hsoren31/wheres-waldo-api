@@ -21,7 +21,7 @@ model Image {
   height  Int
   width   Int
   stageId String @unique
-  stage   Stage  @relation(fields: [stageId], references: [id])
+  stage   Stage  @relation(fields: [stageId], references: [id], onDelete: Cascade)
 }
 
 model Character {
@@ -29,7 +29,7 @@ model Character {
   name     String
   location Json
   stageId  String?
-  stage    Stage?  @relation(fields: [stageId], references: [id])
+  stage    Stage?  @relation(fields: [stageId], references: [id], onDelete: Cascade)
 }
 
 model Score {
@@ -38,5 +38,5 @@ model Score {
   time      DateTime
   createdAt DateTime @default(now())
   stageId   String?
-  stage     Stage?   @relation(fields: [stageId], references: [id])
+  stage     Stage?   @relation(fields: [stageId], references: [id], onDelete: Cascade)
 }

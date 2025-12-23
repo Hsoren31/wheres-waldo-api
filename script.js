@@ -8,6 +8,7 @@ const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
+  await prisma.stage.deleteMany();
   await prisma.stage.create({
     data: {
       title: "Space Station",
