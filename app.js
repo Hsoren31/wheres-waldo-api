@@ -57,14 +57,18 @@ app.post("/:stageId", [
   },
 ]);
 
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
 app.get("/{*splat}", (req, res) => {
   res.status(404);
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, "0.0.0.0", (error) => {
+app.listen(PORT, (error) => {
   if (error) {
     throw error;
   }
-  console.log(`My express app`);
+  console.log(`My express app listening on PORT ${PORT}`);
 });
