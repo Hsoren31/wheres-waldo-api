@@ -2,9 +2,11 @@ import _ from "lodash";
 import "dotenv/config.js";
 import { prisma } from "./lib/prisma.js";
 import express from "express";
+import session from "express-session";
 import { body, check, validationResult, matchedData } from "express-validator";
 
 const app = express();
+app.use(session({ secret: "cats", resave: false, saveUninitialized: false }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
