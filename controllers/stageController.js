@@ -18,6 +18,7 @@ async function startGame(req, res) {
       return { ...character, found: false };
     });
     stage.gameId = crypto.randomUUID();
+    stage.startTime = new Date().getTime();
     req.session.game = stage;
     res.send(stage);
   } catch (err) {
@@ -59,7 +60,13 @@ async function validateGuess(req, res) {
             (character) => character.found == true
           )
         ) {
-          return res.send("You found all charcters congrats!!");
+          req.session.game.endTime = new Date().getTime();
+          let timeInSeconds =
+            (req.session.game.endTime - req.session.game.startTime) * 0.001;
+          req.session.game.stopwatchTime = timeInSeconds;
+          return res.send(
+            `You found all the characters in ${timeInSeconds}!! Congrats.`
+          );
         }
         return res.send("You Found character");
       }
