@@ -54,6 +54,13 @@ async function validateGuess(req, res) {
             return character;
           }
         );
+        if (
+          req.session.game.characters.every(
+            (character) => character.found == true
+          )
+        ) {
+          return res.send("You found all charcters congrats!!");
+        }
         return res.send("You Found character");
       }
     }
