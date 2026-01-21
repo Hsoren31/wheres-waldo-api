@@ -35,7 +35,7 @@ model Character {
 model Score {
   id        String   @id @default(uuid())
   name      String
-  time      DateTime
+  time      Float
   createdAt DateTime @default(now())
   stageId   String?
   stage     Stage?   @relation(fields: [stageId], references: [id], onDelete: Cascade)

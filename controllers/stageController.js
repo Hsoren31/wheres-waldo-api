@@ -77,4 +77,30 @@ async function validateGuess(req, res) {
   }
 }
 
-export { startGame, validateGuess };
+async function addScore(req, res) {
+  const { name } = req.body;
+  const { stageId } = req.params;
+  await prisma.score.create({
+    data: {
+      name,
+      time: req.session.game.stopwatchTime,
+      stageId,
+    },
+  });
+  const leaderboard = await prisma.score.findMany({
+    where: {
+      stageId,
+    },
+    orderBy: [
+      {
+        time: "asc",
+      },
+      {
+        createdAt: "desc",
+      },
+    ],
+  });
+  res.send(leaderboard);
+}
+
+export { startGame, validateGuess, addScore };

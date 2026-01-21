@@ -2,7 +2,11 @@ import _ from "lodash";
 import "dotenv/config.js";
 import express from "express";
 import session from "express-session";
-import { startGame, validateGuess } from "./controllers/stageController.js";
+import {
+  startGame,
+  validateGuess,
+  addScore,
+} from "./controllers/stageController.js";
 
 const app = express();
 app.use(
@@ -17,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get("/:stageId", startGame);
 app.post("/:stageId", validateGuess);
+app.post("/:stageId/leaderboard", addScore);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
