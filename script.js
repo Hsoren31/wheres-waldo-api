@@ -14,7 +14,6 @@ async function main() {
       title: "Space Station",
       image: {
         create: {
-          title: "Space Station",
           url: "https://res.cloudinary.com/dsbeywhmi/image/upload/v1765988689/space_station_wheres_waldo_bi3zug.jpg",
           height: 1685,
           width: 2560,

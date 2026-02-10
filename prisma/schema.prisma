@@ -10,14 +10,13 @@ datasource db {
 model Stage {
   id          String      @id @default(uuid())
   title       String      @unique
-  characters  Character[]
   image       Image?
-  leaderBoard Score[]
+  characters  Character[]
+  leaderBoard Game[]
 }
 
 model Image {
-  title   String @id @unique
-  url     String
+  url     String @id
   height  Int
   width   Int
   stageId String @unique
@@ -32,11 +31,19 @@ model Character {
   stage    Stage?  @relation(fields: [stageId], references: [id], onDelete: Cascade)
 }
 
-model Score {
-  id        String   @id @default(uuid())
-  name      String
-  time      Float
-  createdAt DateTime @default(now())
-  stageId   String?
-  stage     Stage?   @relation(fields: [stageId], references: [id], onDelete: Cascade)
+model Game {
+  id         String   @id @default(uuid())
+  playerName String?
+  time       Float?
+  createdAt  DateTime @default(now())
+  characters Json
+  stageId    String?
+  stage      Stage?   @relation(fields: [stageId], references: [id], onDelete: Cascade)
+}
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
 }

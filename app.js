@@ -2,26 +2,31 @@ import _ from "lodash";
 import "dotenv/config.js";
 import express from "express";
 import session from "express-session";
-import {
-  startGame,
-  validateGuess,
-  addScore,
-} from "./controllers/stageController.js";
+import { PrismaSessionStore } from "@quixo3/prisma-session-store";
+import { prisma } from "./lib/prisma.js";
+import cors from "cors";
+
+import { gameRouter } from "./routers/gameRouter.js";
 
 const app = express();
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+app.use(
+  session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: true,
+    store: new PrismaSessionStore(prisma, {
+      checkPeriod: 2 * 60 * 1000, //ms
+      dbRecordIdIsSessionId: true,
+      dbRecordIdFunction: undefined,
+    }),
+  })
+);
 
-app.get("/:stageId", startGame);
-app.post("/:stageId", validateGuess);
-app.post("/:stageId/leaderboard", addScore);
+app.use("/game", gameRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
