@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { prisma } from "../lib/prisma.js";
 
 async function createGame(req, res) {
@@ -29,7 +30,7 @@ async function createGame(req, res) {
       },
     });
     req.session.game = game;
-    res.status(201).send("successful");
+    res.status(200).send("session created");
   } catch (err) {
     console.error(err);
     res.status(404);
@@ -58,21 +59,18 @@ async function checkGameEnd(characters) {
   });
 }
 
-function calculateTime(startTime) {
-  const endTime = Date.now();
+function calculateTime(startTime, endTime) {
   startTime = Date.parse(startTime);
-  let result = new Date(endTime - startTime);
-  let minutes = result.getMinutes();
-  let seconds = result.getSeconds();
-  let milliseconds = result.getMilliseconds();
-  return `${minutes}:${seconds}.${milliseconds}`;
+  const difference = new Date(endTime - startTime);
+  const time = format(difference, "mm:ss.SSS");
+  return time;
 }
 
 async function checkGuess(req, res) {
   try {
-    const { game } = req.session;
+    const endTime = Date.now();
+    const game = req.session.game;
     const { characterGuess, locationGuess } = req.body;
-
     const { location } = await prisma.character.findFirstOrThrow({
       where: {
         stageId: game.stageId,
@@ -100,7 +98,7 @@ async function checkGuess(req, res) {
     });
     const gameEnd = await checkGameEnd(updatedCharacters);
     if (gameEnd) {
-      const time = calculateTime(game.createdAt);
+      const time = calculateTime(game.createdAt, endTime);
       res.json({ gameEnd: true, time: time });
       return;
     }
