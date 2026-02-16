@@ -59,7 +59,7 @@ async function checkGuess(req, res) {
       res.status(404).send("Could not find character");
       return;
     }
-    const results = await checkLocations(locationGuess, location);
+    const results = await checkLocations(locationGuess, location.location);
     if (!results) {
       res.send(false);
       return;
@@ -71,12 +71,13 @@ async function checkGuess(req, res) {
       return character;
     });
     const gameEnd = await checkGameEnd(updatedCharacters);
+    const updatedGame = await queries.updateGame(game.id, updatedCharacters);
     if (gameEnd) {
       const time = calculateTime(game.createdAt, endTime);
+      await queries.addToLeaderboard(game.id, "Alice", time);
       res.json({ gameEnd: true, time: time });
       return;
     }
-    const updatedGame = await queries.updateGame(game.id, updatedCharacters);
     req.session.game = updatedGame;
     res.send(true);
   } catch (err) {

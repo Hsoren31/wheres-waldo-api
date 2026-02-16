@@ -55,4 +55,22 @@ async function updateGame(gameId, characters) {
   return updatedGame;
 }
 
-export { getStageCharacters, createGame, getCharacterLocation, updateGame };
+async function addToLeaderboard(gameId, name, time) {
+  const game = await prisma.game.update({
+    where: {
+      id: gameId,
+    },
+    data: {
+      playerName: name,
+      time: time,
+    },
+  });
+}
+
+export {
+  getStageCharacters,
+  createGame,
+  getCharacterLocation,
+  updateGame,
+  addToLeaderboard,
+};

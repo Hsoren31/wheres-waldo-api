@@ -34,7 +34,7 @@ model Character {
 model Game {
   id         String   @id @default(uuid())
   playerName String?
-  time       Float?
+  time       String?
   createdAt  DateTime @default(now())
   characters Json
   stageId    String?
