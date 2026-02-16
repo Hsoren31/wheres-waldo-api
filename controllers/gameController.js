@@ -1,39 +1,19 @@
 import { format } from "date-fns";
-import { prisma } from "../lib/prisma.js";
+import * as queries from "../queries/gameQueries.js";
 
 async function createGame(req, res) {
   try {
     const { stageId } = req.params;
-    const { characters } = await prisma.stage.findFirst({
-      where: {
-        id: stageId,
-      },
-      select: {
-        characters: {
-          select: {
-            name: true,
-          },
-        },
-      },
-    });
+    const characters = await queries.getStageCharacters(stageId);
     const gameCharacters = characters.map((character) => {
       return { ...character, found: false };
     });
-    const game = await prisma.game.create({
-      data: {
-        stage: {
-          connect: {
-            id: stageId,
-          },
-        },
-        characters: gameCharacters,
-      },
-    });
+    const game = await queries.createGame(stageId, gameCharacters);
     req.session.game = game;
     res.status(200).send("session created");
   } catch (err) {
     console.error(err);
-    res.status(404);
+    res.status(404).send("Could not create session");
   }
 }
 
@@ -71,20 +51,14 @@ async function checkGuess(req, res) {
     const endTime = Date.now();
     const game = req.session.game;
     const { characterGuess, locationGuess } = req.body;
-    const { location } = await prisma.character.findFirstOrThrow({
-      where: {
-        stageId: game.stageId,
-        name: characterGuess,
-      },
-      select: {
-        location: true,
-      },
-    });
+    const location = await queries.getCharacterLocation(
+      game.stageId,
+      characterGuess
+    );
     if (!location) {
       res.status(404).send("Could not find character");
       return;
     }
-
     const results = await checkLocations(locationGuess, location);
     if (!results) {
       res.send(false);
@@ -102,15 +76,8 @@ async function checkGuess(req, res) {
       res.json({ gameEnd: true, time: time });
       return;
     }
-    const gameUpdated = await prisma.game.update({
-      where: {
-        id: game.id,
-      },
-      data: {
-        characters: updatedCharacters,
-      },
-    });
-    req.session.game = gameUpdated;
+    const updatedGame = await queries.updateGame(game.id, updatedCharacters);
+    req.session.game = updatedGame;
     res.send(true);
   } catch (err) {
     console.error(err);
