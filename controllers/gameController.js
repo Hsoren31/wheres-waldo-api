@@ -74,7 +74,8 @@ async function checkGuess(req, res) {
     const updatedGame = await queries.updateGame(game.id, updatedCharacters);
     if (gameEnd) {
       const time = calculateTime(game.createdAt, endTime);
-      await queries.addToLeaderboard(game.id, "Alice", time);
+      const finalGame = await queries.endGame(game.id, updatedCharacters, time);
+      req.session.game = finalGame;
       res.json({ gameEnd: true, time: time });
       return;
     }
@@ -84,6 +85,13 @@ async function checkGuess(req, res) {
     console.error(err);
     res.status(404);
   }
+}
+
+async function addToLeaderboard(req, res) {
+  const game = req.session.game;
+  const { name } = req.body;
+  await queries.addToLeaderboard(game.id, name, game.time);
+  res.send("Added to leaderboard");
 }
 
 async function readGame(req, res) {
@@ -96,7 +104,22 @@ async function readGame(req, res) {
   });
   res.json(game);
 }
+
+async function getLeaderboard(req, res) {
+  const { stageId } = req.params;
+
+  const leaderboard = await queries.getLeaderboard(stageId);
+  res.json(leaderboard);
+}
 async function updateGame() {}
 async function deleteGame() {}
 
-export { createGame, checkGuess, readGame, updateGame, deleteGame };
+export {
+  createGame,
+  checkGuess,
+  readGame,
+  updateGame,
+  deleteGame,
+  getLeaderboard,
+  addToLeaderboard,
+};

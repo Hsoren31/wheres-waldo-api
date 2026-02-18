@@ -1,17 +1,13 @@
 import { Router } from "express";
-import {
-  createGame,
-  checkGuess,
-  readGame,
-  updateGame,
-  deleteGame,
-} from "../controllers/gameController.js";
+import * as controller from "../controllers/gameController.js";
 const gameRouter = Router();
 
-gameRouter.post("/create/:stageId", createGame);
-gameRouter.post("/guess", checkGuess);
-gameRouter.get("/read/:id", readGame);
-gameRouter.put("/update", updateGame);
-gameRouter.delete("/delete", deleteGame);
+gameRouter.post("/create/:stageId", controller.createGame);
+gameRouter.post("/guess", controller.checkGuess);
+gameRouter.post("/leaderboard", controller.addToLeaderboard);
+gameRouter.get("/read/:id", controller.readGame);
+gameRouter.get("/:stageId", controller.getLeaderboard);
+gameRouter.put("/update", controller.updateGame);
+gameRouter.delete("/delete", controller.deleteGame);
 
 export { gameRouter };

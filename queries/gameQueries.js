@@ -55,6 +55,19 @@ async function updateGame(gameId, characters) {
   return updatedGame;
 }
 
+async function endGame(gameId, characters, time) {
+  const updatedGame = await prisma.game.update({
+    where: {
+      id: gameId,
+    },
+    data: {
+      characters,
+      time,
+    },
+  });
+  return updatedGame;
+}
+
 async function addToLeaderboard(gameId, name, time) {
   const game = await prisma.game.update({
     where: {
@@ -67,10 +80,40 @@ async function addToLeaderboard(gameId, name, time) {
   });
 }
 
+async function getLeaderboard(stageId) {
+  const leaderboard = await prisma.game.findMany({
+    where: {
+      stageId: stageId,
+      playerName: {
+        not: null,
+      },
+      time: {
+        not: null,
+      },
+    },
+    orderBy: [
+      {
+        time: "asc",
+      },
+      {
+        createdAt: "desc",
+      },
+    ],
+    take: 10,
+    select: {
+      playerName: true,
+      time: true,
+    },
+  });
+  return leaderboard;
+}
+
 export {
   getStageCharacters,
   createGame,
   getCharacterLocation,
   updateGame,
   addToLeaderboard,
+  getLeaderboard,
+  endGame,
 };
