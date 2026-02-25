@@ -23,7 +23,7 @@ async function main() {
         create: [
           {
             name: "Waldo",
-            location: { x: 138, y: 1050 },
+            location: { x: 1038, y: 1050 },
           },
           {
             name: "Wenda",
