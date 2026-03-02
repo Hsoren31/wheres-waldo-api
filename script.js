@@ -23,23 +23,23 @@ async function main() {
         create: [
           {
             name: "Waldo",
-            location: { x: 1038, y: 1050 },
+            location: { x: 40.5, y: 62.31 },
           },
           {
             name: "Wenda",
-            location: { x: 756, y: 874 },
+            location: { x: 29.53, y: 52.96 },
           },
           {
             name: "Wizard Whitebeard",
-            location: { x: 1999, y: 977 },
+            location: { x: 78.08, y: 58.92 },
           },
           {
             name: "Odlaw",
-            location: { x: 182, y: 1163 },
+            location: { x: 7.1, y: 69.02 },
           },
           {
             name: "Woof",
-            location: { x: 1506, y: 1529 },
+            location: { x: 58.82, y: 92.21 },
           },
         ],
       },

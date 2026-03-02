@@ -19,12 +19,12 @@ async function createGame(req, res) {
 
 async function checkLocations(locationGuess, location) {
   if (
-    location.x - 50 <= locationGuess.x &&
-    locationGuess.x <= location.x + 50
+    location.x - 1.5 <= locationGuess.x &&
+    locationGuess.x <= location.x + 1.5
   ) {
     if (
-      location.y - 50 <= locationGuess.y &&
-      locationGuess.y <= location.y + 50
+      location.y - 1.5 <= locationGuess.y &&
+      locationGuess.y <= location.y + 1.5
     ) {
       return true;
     }
