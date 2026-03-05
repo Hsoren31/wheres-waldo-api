@@ -10,7 +10,7 @@ async function createGame(req, res) {
     });
     const game = await queries.createGame(stageId, gameCharacters);
     req.session.game = game;
-    res.status(200).send("session created");
+    res.status(200).json(game.characters);
   } catch (err) {
     console.error(err);
     res.status(404).send("Could not create session");
@@ -61,7 +61,7 @@ async function checkGuess(req, res) {
     }
     const results = await checkLocations(locationGuess, location.location);
     if (!results) {
-      res.send(false);
+      res.json({ found: false });
       return;
     }
     const updatedCharacters = game.characters.map((character) => {
@@ -76,11 +76,11 @@ async function checkGuess(req, res) {
       const time = calculateTime(game.createdAt, endTime);
       const finalGame = await queries.endGame(game.id, updatedCharacters, time);
       req.session.game = finalGame;
-      res.json({ gameEnd: true, time: time });
+      res.json({ found: true, gameEnd: true, time: time });
       return;
     }
     req.session.game = updatedGame;
-    res.send(true);
+    res.json({ found: true, characters: game.characters });
   } catch (err) {
     console.error(err);
     res.status(404);
