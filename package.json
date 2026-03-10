@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "node script.js",
+    "build": "npx prisma generate && node script.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
   },
