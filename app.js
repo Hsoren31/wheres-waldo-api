@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://where-s-waldo-gamma.vercel.app"],
+    origin: ["http://localhost:5173", "https://where-s-waldo-lime.vercel.app/"],
     credentials: true,
   })
 );
