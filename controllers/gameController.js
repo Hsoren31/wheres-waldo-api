@@ -1,14 +1,16 @@
 import { format } from "date-fns";
 import * as queries from "../queries/gameQueries.js";
+import * as stageDb from "../queries/stageQueries.js";
 
 async function createGame(req, res) {
   try {
-    const { stageId } = req.params;
-    const characters = await queries.getStageCharacters(stageId);
+    const { stageTitle } = req.params;
+    const stage = await stageDb.getStageByTitle(stageTitle);
+    const characters = await queries.getStageCharacters(stage.id);
     const gameCharacters = characters.map((character) => {
       return { ...character, found: false };
     });
-    const game = await queries.createGame(stageId, gameCharacters);
+    const game = await queries.createGame(stage.id, gameCharacters);
     req.session.game = game;
     res.status(200).json(game.characters);
   } catch (err) {
@@ -50,6 +52,7 @@ async function checkGuess(req, res) {
   try {
     const endTime = Date.now();
     const game = req.session.game;
+    console.log(game);
     const { characterGuess, locationGuess } = req.body;
     const location = await queries.getCharacterLocation(
       game.stageId,

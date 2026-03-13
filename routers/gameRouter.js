@@ -2,7 +2,7 @@ import { Router } from "express";
 import * as controller from "../controllers/gameController.js";
 const gameRouter = Router();
 
-gameRouter.post("/create/:stageId", controller.createGame);
+gameRouter.post("/create/:stageTitle", controller.createGame);
 gameRouter.post("/guess", controller.checkGuess);
 gameRouter.post("/leaderboard", controller.addToLeaderboard);
 gameRouter.get("/read/:id", controller.readGame);
