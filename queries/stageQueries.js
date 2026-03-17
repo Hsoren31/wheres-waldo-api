@@ -11,7 +11,6 @@ async function getStageByTitle(title) {
       title: { contains: formatTitle },
     },
   });
-  console.log(stage);
   return stage;
 }
 

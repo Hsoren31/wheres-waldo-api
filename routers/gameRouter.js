@@ -3,7 +3,7 @@ import * as controller from "../controllers/gameController.js";
 const gameRouter = Router();
 
 gameRouter.post("/create/:stageTitle", controller.createGame);
-gameRouter.post("/guess", controller.checkGuess);
+gameRouter.post("/guess/:stageTitle", controller.checkGuess);
 gameRouter.post("/leaderboard", controller.addToLeaderboard);
 gameRouter.get("/read/:id", controller.readGame);
 gameRouter.get("/:stageId", controller.getLeaderboard);
