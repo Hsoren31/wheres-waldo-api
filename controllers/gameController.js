@@ -49,8 +49,8 @@ async function checkGuess(req, res) {
 }
 
 async function addToLeaderboard(req, res) {
-  const { name, game, time } = req.body;
-  await queries.addToLeaderboard(game, name, time);
+  const { gameId, playerName } = req.body;
+  await queries.addToLeaderboard(gameId, playerName);
   res.send("Added to leaderboard");
 }
 
@@ -66,9 +66,9 @@ async function readGame(req, res) {
 }
 
 async function getLeaderboard(req, res) {
-  const { stageId } = req.params;
-
-  const leaderboard = await queries.getLeaderboard(stageId);
+  const { stageTitle } = req.params;
+  const stageQuery = stageTitle.split("_").join(" ");
+  const leaderboard = await queries.getLeaderboard(stageQuery);
   res.json(leaderboard);
 }
 async function updateGame() {}

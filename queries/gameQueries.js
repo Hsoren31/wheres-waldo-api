@@ -80,44 +80,51 @@ async function endGame(gameId, characters, time) {
   return updatedGame;
 }
 
-async function addToLeaderboard(game, name, time) {
+async function addToLeaderboard(gameId, playerName) {
   await prisma.game.update({
     where: {
-      id: game,
+      id: gameId,
     },
     data: {
-      playerName: name,
-      time: time,
+      playerName: playerName,
     },
   });
 }
 
-async function getLeaderboard(stageId) {
-  const leaderboard = await prisma.game.findMany({
+async function getLeaderboard(stageTitle) {
+  const { leaderBoard } = await prisma.stage.findFirst({
     where: {
-      stageId: stageId,
-      playerName: {
-        not: null,
-      },
-      time: {
-        not: null,
+      title: {
+        contains: stageTitle,
+        mode: "insensitive",
       },
     },
-    orderBy: [
-      {
-        time: "asc",
-      },
-      {
-        createdAt: "desc",
-      },
-    ],
-    take: 10,
     select: {
-      playerName: true,
-      time: true,
+      leaderBoard: {
+        where: {
+          playerName: {
+            not: null,
+          },
+          time: {
+            not: null,
+          },
+        },
+        select: {
+          playerName: true,
+          time: true,
+        },
+        orderBy: [
+          {
+            time: "asc",
+          },
+          {
+            createdAt: "desc",
+          },
+        ],
+      },
     },
   });
-  return leaderboard;
+  return leaderBoard;
 }
 
 async function getGameById(id) {
