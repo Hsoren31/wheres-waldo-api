@@ -36,14 +36,14 @@ async function checkGuess(req, res) {
     if (gameOver) {
       const time = calculateTime(game.createdAt);
       await queries.endGame(gameId, characters, time);
-      res.json({ result: true, gameOver: true, time: time });
+      res.json({ found: true, gameOver: true, time: time });
       return;
     }
     await queries.updateGame(gameId, characters);
-    res.json({ result: true });
+    res.json({ found: true });
     return;
   } else {
-    res.json({ result: false });
+    res.json({ found: false });
     return;
   }
 }
