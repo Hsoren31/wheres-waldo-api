@@ -31,7 +31,7 @@ async function createGame(stageId, characters) {
 }
 
 async function getCharacterLocation(stageId, character) {
-  const location = await prisma.character.findFirst({
+  const { location } = await prisma.character.findFirst({
     where: {
       stageId,
       name: character,

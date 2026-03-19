@@ -19,45 +19,32 @@ async function createGame(req, res) {
 }
 
 async function checkGuess(req, res) {
-  try {
-    const endTime = Date.now();
-    const { stageTitle } = req.params;
-    const { characterGuess, locationGuess, game } = req.body;
-    const stage = await stageDb.getStageByTitle(stageTitle);
-    const location = await queries.getCharacterLocation(
-      stage.id,
-      characterGuess
-    );
-    if (!location) {
-      res.status(404).send("Could not find character");
+  //receive current game id and players guess
+  const { gameId, guess } = req.body;
+  const game = await queries.getGameById(gameId);
+  //Find the true location of targeted character
+  const trueLocation = await queries.getCharacterLocation(
+    game.stageId,
+    guess.characterGuess
+  );
+  //Compare the guess location with the true location
+  const results = checkLocations(guess.locationGuess, trueLocation);
+  if (results) {
+    const characters = updateCharacters(guess.characterGuess, game.characters);
+    // Check game over
+    const gameOver = checkGameEnd(characters);
+    if (gameOver) {
+      const time = calculateTime(game.createdAt);
+      await queries.endGame(gameId, characters, time);
+      res.json({ result: true, gameOver: true, time: time });
       return;
     }
-    const results = await checkLocations(locationGuess, location.location);
-    if (!results) {
-      res.json({ found: false });
-      return;
-    }
-    const { characters } = await queries.getGameCharacters(game);
-    const updatedCharacters = characters.map((character) => {
-      if (character.name === characterGuess) {
-        return { ...character, found: true };
-      }
-      return character;
-    });
-    const gameEnd = await checkGameEnd(updatedCharacters);
-    let updatedGame = await queries.updateGame(game, updatedCharacters);
-    if (gameEnd) {
-      const gameData = await queries.getGameById(game);
-      console.log(gameData);
-      const time = calculateTime(gameData.createdAt, endTime);
-      updatedGame = await queries.endGame(game, updatedCharacters, time);
-      res.json({ found: true, gameEnd: true, time: time });
-      return;
-    }
-    res.json({ found: true, characters: updatedCharacters });
-  } catch (err) {
-    console.error(err);
-    res.status(404);
+    await queries.updateGame(gameId, characters);
+    res.json({ result: true });
+    return;
+  } else {
+    res.json({ result: false });
+    return;
   }
 }
 
@@ -87,7 +74,7 @@ async function getLeaderboard(req, res) {
 async function updateGame() {}
 async function deleteGame() {}
 
-async function checkLocations(locationGuess, location) {
+function checkLocations(locationGuess, location) {
   if (
     location.x - 1.5 <= locationGuess.x &&
     locationGuess.x <= location.x + 1.5
@@ -103,17 +90,28 @@ async function checkLocations(locationGuess, location) {
   }
 }
 
-async function checkGameEnd(characters) {
+function checkGameEnd(characters) {
   return characters.every((character) => {
     return character.found === true;
   });
 }
 
-function calculateTime(startTime, endTime) {
+function calculateTime(startTime) {
+  const endTime = Date.now();
   startTime = Date.parse(startTime);
   const difference = new Date(endTime - startTime);
   const time = format(difference, "mm:ss.SSS");
   return time;
+}
+
+function updateCharacters(guess, characters) {
+  const updatedCharacters = characters.map((character) => {
+    if (character.name === guess) {
+      return { ...character, found: true };
+    }
+    return character;
+  });
+  return updatedCharacters;
 }
 
 export {
