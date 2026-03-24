@@ -122,6 +122,7 @@ async function getLeaderboard(stageTitle) {
             createdAt: "desc",
           },
         ],
+        take: 10,
       },
     },
   });
