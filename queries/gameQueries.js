@@ -110,6 +110,7 @@ async function getLeaderboard(stageTitle) {
           },
         },
         select: {
+          id: true,
           playerName: true,
           time: true,
         },
