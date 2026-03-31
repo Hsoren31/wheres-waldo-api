@@ -15,7 +15,11 @@ async function getStageByTitle(title) {
 }
 
 async function getStages() {
-  const stages = await prisma.stage.findMany();
+  const stages = await prisma.stage.findMany({
+    include: {
+      image: true,
+    },
+  });
   return stages;
 }
 
