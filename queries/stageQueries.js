@@ -14,4 +14,9 @@ async function getStageByTitle(title) {
   return stage;
 }
 
-export { getStageByTitle };
+async function getStages() {
+  const stages = await prisma.stage.findMany();
+  return stages;
+}
+
+export { getStageByTitle, getStages };

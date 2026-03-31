@@ -71,8 +71,14 @@ async function getLeaderboard(req, res) {
   const leaderboard = await queries.getLeaderboard(stageQuery);
   res.json(leaderboard);
 }
+
 async function updateGame() {}
 async function deleteGame() {}
+
+async function getAllStages(req, res) {
+  const stages = await stageDb.getStages();
+  res.json(stages);
+}
 
 function checkLocations(locationGuess, location) {
   if (
@@ -122,4 +128,5 @@ export {
   deleteGame,
   getLeaderboard,
   addToLeaderboard,
+  getAllStages,
 };
