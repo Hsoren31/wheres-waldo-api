@@ -38,6 +38,78 @@ async function main() {
       },
     },
   });
+  await prisma.stage.create({
+    data: {
+      title: "Beach",
+      image: {
+        create: {
+          url: "https://res.cloudinary.com/dsbeywhmi/image/upload/v1774975713/Wheres-Waldo-Beach_tba1nv.jpg",
+          height: 1644,
+          width: 2560,
+        },
+      },
+      characters: {
+        create: [
+          {
+            name: "Waldo",
+            location: { x: 61.83, y: 38.38 },
+          },
+          {
+            name: "Wenda",
+            location: { x: 77.3, y: 40.81 },
+          },
+          {
+            name: "Wizard Whitebeard",
+            location: { x: 27.03, y: 36.31 },
+          },
+          {
+            name: "Odlaw",
+            location: { x: 10.78, y: 35.27 },
+          },
+          {
+            name: "Woof",
+            location: { x: 67.85, y: 37.46 },
+          },
+        ],
+      },
+    },
+  });
+  await prisma.stage.create({
+    data: {
+      title: "Ski Slopes",
+      image: {
+        create: {
+          url: "https://res.cloudinary.com/dsbeywhmi/image/upload/v1774975732/Wheres-Waldo-Skiing_gi5hgw.jpg",
+          height: 1623,
+          width: 2560,
+        },
+      },
+      characters: {
+        create: [
+          {
+            name: "Waldo",
+            location: { x: 85.5, y: 73.38 },
+          },
+          {
+            name: "Wenda",
+            location: { x: 49.02, y: 41.58 },
+          },
+          {
+            name: "Wizard Whitebeard",
+            location: { x: 6.91, y: 95.71 },
+          },
+          {
+            name: "Odlaw",
+            location: { x: 31.83, y: 63.77 },
+          },
+          {
+            name: "Woof",
+            location: { x: 29.72, y: 71.9 },
+          },
+        ],
+      },
+    },
+  });
 }
 
 main()
