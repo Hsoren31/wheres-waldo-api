@@ -1,14 +1,9 @@
 import { prisma } from "../lib/prisma.js";
 
 async function getStageByTitle(title) {
-  let formatTitle = title.split("_");
-  formatTitle = formatTitle.map((string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  });
-  formatTitle = formatTitle.join(" ");
   const stage = await prisma.stage.findFirst({
     where: {
-      title: { contains: formatTitle },
+      title: { contains: title, mode: "insensitive" },
     },
     include: {
       image: true,
