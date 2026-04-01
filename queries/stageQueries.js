@@ -10,6 +10,9 @@ async function getStageByTitle(title) {
     where: {
       title: { contains: formatTitle },
     },
+    include: {
+      image: true,
+    },
   });
   return stage;
 }

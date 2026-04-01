@@ -75,11 +75,6 @@ async function getLeaderboard(req, res) {
 async function updateGame() {}
 async function deleteGame() {}
 
-async function getAllStages(req, res) {
-  const stages = await stageDb.getStages();
-  res.json(stages);
-}
-
 function checkLocations(locationGuess, location) {
   if (
     location.x - 1.5 <= locationGuess.x &&
@@ -128,5 +123,4 @@ export {
   deleteGame,
   getLeaderboard,
   addToLeaderboard,
-  getAllStages,
 };

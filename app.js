@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 
 import { gameRouter } from "./routers/gameRouter.js";
+import { stageRouter } from "./routers/stageRouter.js";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(
 );
 
 app.use("/game", gameRouter);
+app.use("/stages", stageRouter);
 
 app.get("/{*splat}", (req, res) => {
   res.status(404).send("404 Not Found");
